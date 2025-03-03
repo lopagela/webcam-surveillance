@@ -1,6 +1,8 @@
 import logging
+import time
 
 from webcam_surveillance.configuration import get_configuration
+from webcam_surveillance.video_saver import VideoSaver
 from webcam_surveillance.webcam_properties import WebcamProperties
 from webcam_surveillance.webcam_watcher import WebcamWatcher
 from webcam_surveillance.notifier import LogNotifier, EmailNotifier
@@ -33,7 +35,12 @@ def main_cli():
         log.info("Email notification is disabled")
         notifier = LogNotifier()
 
-    watcher = WebcamWatcher(webcam, notifier=notifier)
+    watcher = WebcamWatcher(
+        webcam_properties=webcam,
+        notifier=notifier
+    )
+    # log.info("Testing if enough memory is available")
+    # watcher.video_saver.test_enough_memory()
     watcher.watch()  # Main loop
     del watcher  # Release the webcam and close all OpenCV windows
     cv2.destroyAllWindows()

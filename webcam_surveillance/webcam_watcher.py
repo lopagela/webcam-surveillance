@@ -25,7 +25,9 @@ class WebcamWatcher:
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.webcam_properties.height)
         self.webcam_properties.initialize_fps_of_webcam(self.cap)
 
-        self.video_saver = VideoSaver(self.webcam_properties, self.notifier)
+        self.video_saver = VideoSaver(
+            webcam_properties=self.webcam_properties,
+            notifier=self.notifier)
 
     def __del__(self):
         # Release the webcam and close all OpenCV windows
