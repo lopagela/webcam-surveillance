@@ -10,7 +10,6 @@ from webcam_surveillance.webcam_properties import WebcamProperties
 log = logging.getLogger(__name__)
 
 class WebcamWatcher:
-    START_RECORDING_DELAY = 2  # seconds -- the number of seconds to wait before starting to record the video
     def __init__(
             self,
             webcam_properties: WebcamProperties,
@@ -39,7 +38,7 @@ class WebcamWatcher:
         # NOTE: Doing it multiple times to get a more reliable first frame
         frame = None
         log.debug("Warm-up the webcam by reading the first frames, to get a more reliable first frame")
-        for _ in range(5):
+        for _ in range(3):
             ret, frame = self.cap.read()
             if not ret:
                 log.error("Error reading webcam frame, exiting")
@@ -70,23 +69,24 @@ class WebcamWatcher:
 
             # Dilate the thresholded image to fill in holes, then find contours on thresholded image
             thresh = cv2.dilate(thresh, None, iterations=2)
-            contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
             # Loop over the contours
             for contour in contours:
                 # If the contour is too small, ignore it
                 if cv2.contourArea(contour) < 500.0:
                     continue
-                log.info("Motion detected in current frame")
                 motion_in_frame_detected = MotionDetected.DETECTED_MOTION
-
-            self.video_saver.add_frame(frame, motion_in_frame_detected)
+                log.info("Motion detected in current frame")
+                break
 
             # Update the first frame
             gray = gray_current
 
             # Display the frame
             cv2.imshow('Frame', frame)
+
+            self.video_saver.add_frame(frame, motion_in_frame_detected)
 
             # Break the loop on 'q' key press
             if cv2.waitKey(1) & 0xFF == ord('q'):

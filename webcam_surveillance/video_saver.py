@@ -125,6 +125,7 @@ class VideoSaver:
         for frame in frames_to_save:
             out.write(frame)
         out.release()
+        log.info("Video clip saved")
         self.notifier.notify_video(
             subject=f"Motion detected in your house at {timestamp.date()}",
             message=f"Motion detected at {timestamp.strftime('%Hh%m:%S')}. More information on your server.",
