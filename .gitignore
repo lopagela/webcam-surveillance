@@ -1,0 +1,17 @@
+# IDEs
+.idea
+
+# Python virtualenv
+.venv
+venv
+
+# Building
+*.egg-info
+__pycache__
+*.pyc
+
+# output videos
+output
+
+# Configuration that contains secrets
+config.toml

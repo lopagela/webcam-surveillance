@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "webcam-surveillance"
+version = "0.1.0"
+requires-python = ">=3.11"
+description = "A simple webcam surveillance system"
+readme = "README.md"
+authors = [
+    { name = "Louis Melchior" }
+]
+
+dependencies = [
+    "opencv-python",  # OpenCV, pre-built for CPU
+    # "sounddevice",  # For audio recording
+]
+
+[tool.setuptools]
+packages = ["webcam_surveillance"]
+
+[project.scripts]
+webcam-surveillance = "webcam_surveillance.__main__:main_cli"
